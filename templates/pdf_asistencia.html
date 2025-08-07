@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="UTF-8">
+  <title>Reporte de Asistencia</title>
+  <style>
+    body { font-family: Arial, sans-serif; }
+    h1 { color: #2c3e50; text-align: center; }
+    .info { margin-bottom: 20px; }
+    table { width: 100%; border-collapse: collapse; }
+    th, td { border: 1px solid #ddd; padding: 8px; text-align: left; }
+    th { background-color: #f2f2f2; }
+    .presente { color: green; }
+    .ausente { color: red; }
+    .resumen { margin-top: 20px; font-weight: bold; }
+  </style>
+</head>
+<body>
+  <h1>Reporte de Asistencia</h1>
+  
+  <div class="info">
+    <p><strong>Carrera:</strong> {{ carrera }}</p>
+    <p><strong>Grupo:</strong> {{ grupo }}</p>
+    <p><strong>Fecha:</strong> {{ fecha }}</p>
+  </div>
+  
+  <table>
+    <thead>
+      <tr>
+        <th>#</th>
+        <th>Matrícula</th>
+        <th>Nombre</th>
+        <th>Asistencia</th>
+      </tr>
+    </thead>
+    <tbody>
+      {% for alumno in alumnos %}
+      <tr>
+        <td>{{ loop.index }}</td>
+        <td>{{ alumno.matricula }}</td>
+        <td>{{ alumno.nombre }}</td>
+        <td class="{% if alumno.asistencia %}presente{% else %}ausente{% endif %}">
+          {% if alumno.asistencia %}Presente{% else %}Ausente{% endif %}
+        </td>
+      </tr>
+      {% endfor %}
+    </tbody>
+  </table>
+  
+  <div class="resumen">
+    <p>Resumen: {{ presentes }} presentes de {{ total }} ({{ porcentaje }}%)</p>
+  </div>
+</body>
+</html>

@@ -1,0 +1,98 @@
+body {
+    margin: 0;
+    font-family: Arial, sans-serif;
+}
+
+.barra-superior {
+    background-color: #572364;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 30px 20px;
+}
+
+.titulo {
+    font-size: 24px;
+    margin: 0;
+    color: white;
+}
+
+.icono-home,
+.home-icon, .help-icon {
+  background-color: white;
+  border-radius: 50%;
+  padding: 10px;
+  font-size: 18px;
+
+}
+
+.contenido-principal {
+    display: flex;
+    padding: 40px;
+    gap: 40px;
+}
+
+.formulario-observaciones {
+    flex: 2;
+    display: flex;
+    flex-direction: column;
+}
+
+.texto-label {
+    font-size: 24px;
+    margin-bottom: 10px;
+    text-decoration: underline;
+}
+
+textarea {
+    width: 100%;
+    height: 125px;
+    font-size: 20px;
+    padding: 10px;
+    resize: none;
+}
+
+.btn-guardar {
+    margin-top: 20px;
+    width: 150px;
+    padding: 10px;
+    font-size: 18px;
+    background-color: #d3d3d3;
+    border: none;
+    border-radius: 15px;
+    cursor: pointer;
+}
+
+.panel-observaciones {
+    flex: 1;
+    background-color: #572364;
+    padding: 20px;
+    border-radius: 15px;
+    height: fit-content;
+}
+
+.titulo-anterior {
+    background-color: #ccc;
+    padding: 10px;
+    border-radius: 12px;
+    font-weight: bold;
+    text-align: center;
+    margin-bottom: 15px;
+}
+
+.observaciones-lista {
+    font-size: 14px;
+}
+
+.observacion-item {
+    margin-bottom: 15px;
+    background-color: white;
+    padding: 10px;
+    border-radius: 10px;
+}
+
+.vacio {
+    font-style: italic;
+    text-align: center;
+    color: #555;
+}

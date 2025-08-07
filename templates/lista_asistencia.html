@@ -1,0 +1,129 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Lista de Asistencia</title>
+  <link rel="stylesheet" href="/static/css/lista_asistencia.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+</head>
+<body>
+  <header class="asistencia-header">
+    <button class="back-button" onclick="window.history.back()">
+      <i class="fas fa-arrow-left"></i> Volver
+    </button>
+    <h1 id="titulo-asistencia">Lista de Asistencia</h1>
+    <div class="header-actions">
+      <button class="help-button" id="btn-ayuda">
+        <i class="fas fa-question"></i>
+      </button>
+    </div>
+  </header>
+
+  <main class="lista-container">
+    <div class="info-grupo">
+      <div>
+        <span class="grupo-label">Carrera:</span>
+        <span id="carrera-nombre">-</span>
+      </div>
+      <div>
+        <span class="grupo-label">Grupo:</span>
+        <span id="grupo-nombre">-</span>
+      </div>
+      <div>
+        <span class="grupo-label">Fecha:</span>
+        <span id="fecha-asistencia">-</span>
+      </div>
+    </div>
+
+    <div class="acciones-superiores">
+      <button class="accion-btn" id="btn-agregar-alumno">
+        <i class="fas fa-user-plus"></i> Agregar Alumno
+      </button>
+      <button class="accion-btn" id="btn-generar-reporte">
+        <i class="fas fa-file-pdf"></i> Generar Reporte
+      </button>
+    </div>
+
+    <div class="tabla-container">
+      <table id="tabla-asistencia">
+        <thead>
+          <tr>
+            <th>No.</th>
+            <th>Matrícula</th>
+            <th>Nombre</th>
+            <th>Asistencia</th>
+            <th>Acciones</th>
+          </tr>
+        </thead>
+        <tbody id="alumnos-lista">
+          <!-- Alumnos se cargarán aquí -->
+        </tbody>
+      </table>
+    </div>
+
+    <div class="acciones-inferiores">
+      <button class="guardar-btn" id="btn-guardar">
+        <i class="fas fa-save"></i> Guardar Asistencia
+      </button>
+      <button class="accion-btn" id="btn-ver-historial">
+        <i class="fas fa-history"></i> Ver Historial
+      </button>
+    </div>
+  </main>
+
+  <!-- Modal para agregar alumno -->
+  <div id="modal-alumno" class="modal">
+    <div class="modal-contenido">
+      <span class="cerrar-modal">&times;</span>
+      <h3>Agregar Nuevo Alumno</h3>
+      <form id="form-alumno">
+        <div class="form-group">
+          <label for="matricula">Matrícula:</label>
+          <input type="text" id="matricula" required>
+        </div>
+        <div class="form-group">
+          <label for="nombre">Nombre completo:</label>
+          <input type="text" id="nombre" required>
+        </div>
+        <button type="submit" class="guardar-btn">
+          <i class="fas fa-save"></i> Guardar
+        </button>
+      </form>
+    </div>
+  </div>
+
+  <!-- Modal para historial -->
+  <div id="modal-historial" class="modal modal-grande">
+    <div class="modal-contenido">
+      <span class="cerrar-modal">&times;</span>
+      <h3>Historial de Asistencias</h3>
+      <div class="filtros-historial">
+        <input type="date" id="fecha-inicio">
+        <input type="date" id="fecha-fin">
+        <button id="btn-filtrar-historial" class="accion-btn">
+          <i class="fas fa-filter"></i> Filtrar
+        </button>
+      </div>
+      <div class="tabla-container">
+        <table id="tabla-historial">
+          <thead>
+            <tr>
+              <th>Fecha</th>
+              <th>Presentes</th>
+              <th>Total</th>
+              <th>Porcentaje</th>
+              <th>Acciones</th>
+            </tr>
+          </thead>
+          <tbody id="historial-lista">
+            <!-- Historial se cargará aquí -->
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+
+  <script src="/static/js/lista_asistencia.js"></script>
+</body>
+</html>

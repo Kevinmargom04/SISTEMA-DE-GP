@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>UPT - Login</title>
+    <link rel="stylesheet" href="/static/css/styles.css">
+    <link rel="icon" href="/images/favicon.ico" type="image/x-icon">
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <a href="#" class="logo-link">
+                <img src="/static/css/images/logo.jpg" alt="UPT Logo" class="upt-logo">
+            </a>
+            <div class="university">UNIVERSIDAD POLITÉCNICA DE TECÁMAC</div>    
+        </div>
+        
+        <div class="content">
+            <div class="sgp">SGP</div>
+
+            <!-- ALERTAS FLASK -->
+            {% with messages = get_flashed_messages(with_categories=true) %}
+              {% if messages %}
+                <div class="alerts">
+                  {% for category, message in messages %}
+                    <div class="alert alert-{{ category }}">{{ message }}</div>
+                  {% endfor %}
+                </div>
+              {% endif %}
+            {% endwith %}
+
+            <form id="loginForm" class="login-form" method="POST" action="/">
+                <div class="form-group">
+                    <label for="username" class="input-label">Ingresa tu Usuario</label>
+                    <input type="text" id="username" name="username" class="form-input" required>
+                    <div class="error-message" id="usernameError"></div>
+                </div>
+                <div class="form-group">
+                    <label for="password" class="input-label">Ingresa tu Contraseña</label>
+                    <div class="password-container">
+                        <input type="password" id="password" name="password" class="form-input" required minlength="8">
+                        <button type="button" class="toggle-password" id="togglePassword" aria-label="Mostrar contraseña">
+                            <svg width="20" height="20" viewBox="0 0 24 24" fill="none"
+                                 xmlns="http://www.w3.org/2000/svg">
+                                <path d="M12 5C5.63636 5 2 12 2 12C2 12 5.63636 19 12 19C18.3636 19 22 12 22 12C22 12 18.3636 5 12 5Z"
+                                      stroke="currentColor" stroke-width="2"/>
+                                <path d="M12 15C13.6569 15 15 13.6569 15 12C15 10.3431 13.6569 9 12 9C10.3431 9 9 10.3431 9 12C9 13.6569 10.3431 15 12 15Z"
+                                      stroke="currentColor" stroke-width="2"/>
+                            </svg>
+                        </button>
+                    </div>
+                    <div class="error-message" id="passwordError"></div>
+                </div>
+                <button type="submit" class="login-button">Ingresar</button>
+            </form>
+
+            <div class="forgot">
+                <a href="#" class="forgot-link">¿Olvidaste tu contraseña?</a>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Mostrar/ocultar contraseña
+        document.getElementById('togglePassword').addEventListener('click', function () {
+            const passwordInput = document.getElementById('password');
+            const type = passwordInput.getAttribute('type') === 'password' ? 'text' : 'password';
+            passwordInput.setAttribute('type', type);
+        });
+
+        // Validación básica del formulario
+        document.getElementById('loginForm').addEventListener('submit', function (e) {
+            const username = document.getElementById('username').value.trim();
+            const password = document.getElementById('password').value.trim();
+
+            if (!username || !password) {
+                e.preventDefault();
+                alert('Por favor, completa todos los campos.');
+            }
+        });
+    </script>
+</body>
+</html>

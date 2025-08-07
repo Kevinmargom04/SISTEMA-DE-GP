@@ -1,0 +1,214 @@
+body {
+    font-family: Arial, sans-serif;
+    margin: 0;
+    padding: 0;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+    background-color: #572364;
+}
+
+.container {
+    width: 400px;
+    background-color: white;
+    padding: 30px;
+    box-shadow: 0 0 30px rgba(0, 0, 0, 0.1);
+    text-align: center;
+}
+
+.header {
+    margin-bottom: 30px;
+}
+
+.upt-logo {
+    height: 190px;
+    margin-bottom: 9px;
+}
+
+.university {
+    font-size: 10px;
+    margin-bottom: 10px;
+}
+
+.sgp {
+    font-size: 20px;
+    font-weight: bold;
+    margin-bottom: 20px;
+}
+
+.login-form {
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+}
+
+.form-group {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+}
+
+.input-label {
+    font-size: 14px;
+    color: #333;
+    margin-bottom: 5px;
+}
+
+.form-input {
+    width: 100%;
+    padding: 8px;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+    box-sizing: border-box;
+}
+.form-input:invalid {
+    border-color: #ff4444;
+}
+
+.login-button {
+    background-color: #7c7a77;
+    color: white;
+    border: none;
+    padding: 10px;
+    border-radius: 4px;
+    cursor: pointer;
+    font-weight: bold;
+    margin-top: 10px;
+}
+
+.login-button:hover {
+    background-color: #003d82;
+}
+
+.forgot {
+    font-size: 12px;
+    color: #666;
+    margin-top: 20px;
+    text-decoration: underline;
+    cursor: pointer;
+}
+
+.logo-link {
+    display: inline-block;
+    text-decoration: none;
+}
+.error-message {
+    color: #ff4444;
+    font-size: 12px;
+    margin-top: 5px;
+    height: 16px;
+}
+/* Estilos para el modal */
+.modal {
+    display: none;
+    position: fixed;
+    z-index: 1000;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0,0,0,0.5);
+}
+
+.modal-content {
+    background-color: white;
+    margin: 10% auto;
+    padding: 20px;
+    width: 350px;
+    border-radius: 8px;
+    box-shadow: 0 0 20px rgba(0,0,0,0.2);
+}
+
+.close {
+    float: right;
+    cursor: pointer;
+    font-size: 24px;
+}
+
+.register-link {
+    font-size: 13px;
+    color: #0056b3;
+    margin-top: 10px;
+    cursor: pointer;
+    text-decoration: underline;
+}
+.toggle-password svg {
+    width: 20px;
+    height: 20px;
+    vertical-align: middle;
+    color: #666;
+}
+
+.toggle-password:hover svg {
+    color: #0056b3;
+}
+.password-container {
+    position: relative;
+    width: 100%;
+}
+
+.password-container .form-input {
+    padding-right: 40px; /* Espacio para el ojito */
+    width: 100%;
+}
+
+.toggle-password {
+    position: absolute;
+    right: 12px;
+    top: 50%;
+    transform: translateY(-50%);
+    background: none;
+    border: none;
+    cursor: pointer;
+    padding: 4px;
+    border-radius: 50%;
+    transition: background 0.3s;
+}   
+
+.toggle-password:hover {
+    background: rgba(0, 0, 0, 0.05);
+}
+
+.toggle-password svg {
+    display: block;
+    width: 20px;
+    height: 20px;
+    color: #666;
+}
+
+/* Estado cuando la contraseña es visible */
+.toggle-password.active svg {
+    color: #0056b3;
+}
+/* ALERTAS PERSONALIZADAS */
+
+.alerts {
+    margin-top: 15px;
+}
+
+.alert {
+    padding: 12px 18px;
+    margin-bottom: 10px;
+    border-radius: 5px;
+    font-size: 14px;
+    font-weight: 500;
+    color: #fff;
+}
+
+/* Estilos por tipo de mensaje */
+.alert-success {
+    background-color: #4caf50;
+}
+
+.alert-danger {
+    background-color: #f44336;
+}
+
+.alert-warning {
+    background-color: #ff9800;
+}
+
+.alert-info {
+    background-color: #2196f3;
+}

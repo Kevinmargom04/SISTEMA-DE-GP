@@ -1,0 +1,110 @@
+body {
+    margin: 0;
+    font-family: Arial, sans-serif;
+}
+
+.barra-superior {
+    background-color: #572364;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 30px 20px;
+}
+
+.titulo {
+    font-size: 24px;
+    margin: 0;
+    color: white;
+}
+
+.icono-home,
+.home-icon, .help-icon {
+  background-color: white;
+  border-radius: 50%;
+  padding: 10px;
+  font-size: 18px;
+
+}
+.reportes-container {
+    padding: 20px;
+    max-width: 1200px;
+    margin: 0 auto;
+}
+
+.lista-reportes {
+    background: white;
+    border-radius: 8px;
+    box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+    padding: 20px;
+}
+
+.reporte-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 20px;
+}
+
+.btn-nuevo {
+    background: #4CAF50;
+    color: white;
+    border: none;
+    padding: 8px 16px;
+    border-radius: 4px;
+    cursor: pointer;
+    font-size: 14px;
+}
+
+table {
+    width: 100%;
+    border-collapse: collapse;
+}
+
+th, td {
+    padding: 12px 15px;
+    text-align: left;
+    border-bottom: 1px solid #ddd;
+}
+
+th {
+    background-color: #f8f9fa;
+    font-weight: 600;
+}
+
+.acciones {
+    display: flex;
+    gap: 8px;
+}
+
+.btn-descargar, .btn-ver, .btn-eliminar {
+    padding: 6px 10px;
+    border-radius: 4px;
+    font-size: 12px;
+    cursor: pointer;
+    text-decoration: none;
+    display: inline-flex;
+    align-items: center;
+    gap: 4px;
+}
+
+.btn-descargar {
+    background: #2196F3;
+    color: white;
+}
+
+.btn-ver {
+    background: #FFC107;
+    color: black;
+}
+
+.btn-eliminar {
+    background: #f44336;
+    color: white;
+    border: none;
+}
+
+.no-data {
+    text-align: center;
+    padding: 20px;
+    color: #666;
+}

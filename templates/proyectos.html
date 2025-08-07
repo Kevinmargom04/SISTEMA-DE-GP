@@ -1,0 +1,322 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Proyectos de Invernadero</title>
+
+    <link rel="stylesheet" href="/static/css/proyectos.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+</head>
+<body>
+    <header>
+        <div class="barra-superior">
+        <div class="home-icon" title="Inicio" onclick="window.location.href='/dashboard'">
+      <i class="fas fa-home"></i>
+    </div>
+        <h1 class="titulo">PROYECTOS DE INVERNADERO</h1>
+        <div class="fas- fas-user-tie">○</div>
+    </div>
+    </header>
+
+    <main class="proyectos-container">
+        <div class="panel-contenido">
+            <!-- Panel de navegación -->
+            <div class="panel-navegacion">
+                <h3><i class="fas fa-list-ul"></i> Lista de Proyectos</h3>
+                <ul class="lista-proyectos">
+                    <li class="proyecto-item" data-proyecto="1">
+                        <i class="fas fa-tint"></i> 1. Bomba/Sistema de Riego
+                    </li>
+                    <li class="proyecto-item" data-proyecto="2">
+                        <i class="fas fa-leaf"></i> 2. Hidroponía
+                    </li>
+                    <li class="proyecto-item" data-proyecto="3">
+                        <i class="fas fa-recycle"></i> 3. Composta
+                    </li>
+                    <li class="proyecto-item expandible" data-proyecto="4">
+                        <div class="expandible-header">
+                            <i class="fas fa-seedling"></i> 4. Germinación
+                            <i class="fas fa-chevron-down flecha"></i>
+                        </div>
+                        <ul class="subproyectos">
+                            <li data-subproyecto="4a">a) Uva</li>
+                            <li data-subproyecto="4b">b) Fresa/Café/Hortalizas</li>
+                            <li data-subproyecto="4c">c) Maíz/Cempasúchil</li>
+                        </ul>
+                    </li>
+                    <li class="proyecto-item" data-proyecto="5">
+                        <i class="fas fa-lightbulb"></i> 5. Iluminación
+                    </li>
+                    <li class="proyecto-item" data-proyecto="6">
+                        <i class="fas fa-bug"></i> 6. Hotel de Insectos
+                    </li>
+                    <li class="proyecto-item" data-proyecto="7">
+                        <i class="fas fa-prescription-bottle-alt"></i> 7. Producto Pomada
+                    </li>
+                    <li class="proyecto-item" data-proyecto="8">
+                        <i class="fas fa-wind"></i> 8. Eólico
+                    </li>
+                    <li class="proyecto-item" data-proyecto="9">
+                        <i class="fas fa-tools"></i> 9. Mantenimiento
+                    </li>
+                </ul>
+            </div>
+
+            <!-- Panel de visualización -->
+            <div class="panel-visualizacion">
+                <div class="proyecto-header">
+                    <h2 id="proyecto-titulo">Seleccione un proyecto</h2>
+                    <div class="proyecto-estado">
+                        <span class="badge">Sin iniciar</span>
+                    </div>
+                </div>
+
+                <div class="proyecto-content">
+                    <div class="proyecto-descripcion">
+                        <h3><i class="fas fa-align-left"></i> Descripción</h3>
+                        <p id="proyecto-desc-text">Seleccione un proyecto de la lista para ver sus detalles.</p>
+                    </div>
+
+                    <div class="proyecto-detalles">
+                        <h3><i class="fas fa-info-circle"></i> Detalles Técnicos</h3>
+                        <div class="detalles-grid">
+                            <div class="detalle-item">
+                                <div class="detalle-label">Responsable:</div>
+                                <div class="detalle-value" id="responsable">-</div>
+                            </div>
+                            <div class="detalle-item">
+                                <div class="detalle-label">Fecha Inicio:</div>
+                                <div class="detalle-value" id="fecha-inicio">-</div>
+                            </div>
+                            <div class="detalle-item">
+                                <div class="detalle-label">Avance:</div>
+                                <div class="detalle-value" id="avance">-</div>
+                            </div>
+                            <div class="detalle-item">
+                                <div class="detalle-label">Inversión:</div>
+                                <div class="detalle-value" id="inversion">-</div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="proyecto-recursos">
+                        <h3><i class="fas fa-box-open"></i> Recursos Asignados</h3>
+                        <div class="recursos-list" id="recursos-list">
+                            <div class="recurso-item">
+                                <i class="fas fa-info-circle"></i> Seleccione un proyecto para ver los recursos
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Panel de acciones -->
+
+            <div class="panel-acciones">
+        <h3><i class="fas fa-cog"></i> Acciones</h3>
+        <button class="accion-btn" id="generar-reporte">
+            <i class="fas fa-file-alt"></i> Generar Reporte
+        </button>
+        <button class="accion-btn" id="editar-proyecto">
+            <i class="fas fa-edit"></i> Editar Proyecto
+        </button>
+        <button class="accion-btn" id="asignar-personal">
+            <i class="fas fa-users"></i> Asignar Personal
+        </button>
+        <button class="accion-btn" id="registrar-gasto">
+            <i class="fas fa-dollar-sign"></i> Registrar Gasto
+        </button>
+        <button class="accion-btn" id="actualizar-avance">
+            <i class="fas fa-tasks"></i> Actualizar Avance
+        </button>
+        <button class="accion-btn imprimir-btn" id="imprimir-detalles">
+            <i class="fas fa-print"></i> Imprimir Detalles
+        </button>
+    </div>
+    </main>
+    
+    <script>
+
+// Variable para almacenar el proyecto actual seleccionado
+let proyectoActual = null;
+
+// Función para cargar los detalles del proyecto (versión mejorada)
+function cargarDetallesProyecto(proyectoId) {
+    proyectoActual = proyectoId; // Actualizar el proyecto actual
+    
+    fetch(`/get-proyecto/${proyectoId}`)
+        .then(response => {
+            if (!response.ok) throw new Error('Proyecto no encontrado');
+            return response.json();
+        })
+        .then(proyecto => {
+            // Actualizar la vista principal
+            document.getElementById('proyecto-titulo').textContent = `${proyecto.id}. ${proyecto.nombre}`;
+            
+            // Actualizar descripción (haciéndola editable)
+            const descElement = document.getElementById('proyecto-desc-text');
+            descElement.textContent = proyecto.descripcion || 'Sin descripción disponible';
+            descElement.contentEditable = true;
+            descElement.addEventListener('blur', () => {
+                actualizarProyecto(proyectoId, {descripcion: descElement.textContent});
+            });
+            
+            // Actualizar estado con colores
+            const badge = document.querySelector('.proyecto-estado .badge');
+            badge.textContent = proyecto.estado || 'Sin iniciar';
+            badge.className = 'badge ' + (
+                proyecto.estado === 'Completado' ? 'completado' : 
+                proyecto.estado === 'En progreso' ? 'en-progreso' : 'sin-iniciar'
+            );
+            
+            // Actualizar detalles técnicos (haciendo editables algunos campos)
+            updateEditableField('responsable', proyecto.responsable, proyectoId, 'responsable');
+            updateEditableField('fecha-inicio', proyecto.fecha_inicio, proyectoId, 'fecha_inicio');
+            updateEditableField('avance', proyecto.avance, proyectoId, 'avance');
+            updateEditableField('inversion', proyecto.inversion, proyectoId, 'inversion');
+            
+            // Actualizar recursos
+            updateResources(proyecto.recursos);
+        })
+        .catch(error => {
+            console.error('Error:', error);
+            alert('Error al cargar los detalles del proyecto');
+        });
+}
+
+// Función auxiliar para campos editables
+function updateEditableField(elementId, value, proyectoId, fieldName) {
+    const element = document.getElementById(elementId);
+    element.textContent = value || '-';
+    element.contentEditable = true;
+    
+    element.addEventListener('blur', () => {
+        const newValue = element.textContent.trim() === '-' ? null : element.textContent.trim();
+        actualizarProyecto(proyectoId, {[fieldName]: newValue});
+    });
+}
+
+// Función para actualizar recursos
+function updateResources(recursos) {
+    const recursosList = document.getElementById('recursos-list');
+    if (recursos) {
+        recursosList.innerHTML = recursos.split(',')
+            .map(recurso => `
+                <div class="recurso-item" contentEditable="true">
+                    <i class="fas fa-info-circle"></i> ${recurso.trim()}
+                </div>`
+            )
+            .join('');
+        
+        // Hacer que los recursos sean editables
+        recursosList.querySelectorAll('.recurso-item').forEach(item => {
+            item.addEventListener('blur', () => {
+                const nuevosRecursos = Array.from(recursosList.querySelectorAll('.recurso-item'))
+                    .map(i => i.textContent.trim().replace('ⓘ', '').trim())
+                    .join(', ');
+                
+                actualizarProyecto(proyectoActual, {recursos: nuevosRecursos});
+            });
+        });
+    } else {
+        recursosList.innerHTML = `
+            <div class="recurso-item" contentEditable="true">
+                <i class="fas fa-info-circle"></i> Click para añadir recursos
+            </div>`;
+        
+        recursosList.querySelector('.recurso-item').addEventListener('blur', function() {
+            const texto = this.textContent.trim().replace('ⓘ', '').trim();
+            if (texto && !texto.startsWith('Click para')) {
+                actualizarProyecto(proyectoActual, {recursos: texto});
+            }
+        });
+    }
+}
+
+// Función para actualizar proyectos en el servidor
+function actualizarProyecto(proyectoId, datos) {
+    fetch(`/actualizar-proyecto/${proyectoId}`, {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(datos)
+    })
+    .then(response => response.json())
+    .then(data => {
+        if (!data.success) throw new Error(data.error || 'Error desconocido');
+        // Actualizar visualización si es necesario
+        if (datos.descripcion || datos.responsable || datos.avance) {
+            cargarDetallesProyecto(proyectoId);
+        }
+    })
+    .catch(error => {
+        console.error('Error al actualizar:', error);
+        alert('Error al guardar cambios: ' + error.message);
+    });
+}
+
+// Event listeners para los proyectos
+document.querySelectorAll('.proyecto-item').forEach(item => {
+    item.addEventListener('click', function() {
+        document.querySelectorAll('.proyecto-item').forEach(i => i.classList.remove('active'));
+        this.classList.add('active');
+        cargarDetallesProyecto(this.getAttribute('data-proyecto'));
+    });
+});
+
+// Manejo del proyecto expandible (Germinación)
+document.querySelector('.expandible-header').addEventListener('click', function(e) {
+    e.stopPropagation();
+    const parent = this.parentElement;
+    parent.classList.toggle('expanded');
+    this.querySelector('.flecha').classList.toggle('fa-chevron-down');
+    this.querySelector('.flecha').classList.toggle('fa-chevron-up');
+});
+
+// Event listeners para los botones de acciones
+document.getElementById('editar-proyecto').addEventListener('click', () => {
+    if (!proyectoActual) return alert('Selecciona un proyecto primero');
+    // Enfocar en la descripción para editar
+    document.getElementById('proyecto-desc-text').focus();
+});
+
+document.getElementById('generar-reporte').addEventListener('click', () => {
+    if (!proyectoActual) {
+        alert('Por favor selecciona un proyecto primero');
+        return;
+    }
+    
+    // Mostrar mensaje de "Generando reporte..."
+    const originalText = document.getElementById('generar-reporte').innerHTML;
+    document.getElementById('generar-reporte').innerHTML = '<i class="fas fa-spinner fa-spin"></i> Generando...';
+    
+    fetch(`/generar-reporte/${proyectoActual}`)
+        .then(response => {
+            if (!response.ok) throw new Error('Error al generar reporte');
+            return response.blob(); // Para manejar la descarga del archivo
+        })
+        .then(blob => {
+            // Crear enlace de descarga
+            const url = window.URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = `reporte_${proyectoActual}.pdf`;
+            document.body.appendChild(a);
+            a.click();
+            document.body.removeChild(a);
+            window.URL.revokeObjectURL(url);
+        })
+        .catch(error => {
+            console.error('Error:', error);
+            alert('Error al generar el reporte: ' + error.message);
+        })
+        .finally(() => {
+            document.getElementById('generar-reporte').innerHTML = originalText;
+        });
+});
+</script>
+</body>
+</html>

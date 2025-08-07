@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Pase de Lista - UPT</title>
+  <link rel="stylesheet" href="/static/css/asistencia.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+</head>
+<body>
+  <div class="barra-superior">
+        <div class="home-icon" title="Inicio" onclick="window.location.href='/dashboard'">
+      <i class="fas fa-home"></i>
+    </div>
+        <h1 class="titulo">OBSERVACIONES</h1>
+        <div class="icono-usuario">○</div>
+    </div>
+  
+
+  <main class="asistencia-container">
+    <div class="filters-section">
+      <div class="date-selector">
+        <label for="fecha">Fecha:</label>
+        <input type="date" id="fecha" name="fecha">
+      </div>
+      <div class="search-box">
+        <input type="text" id="busqueda-carrera" placeholder="Buscar carrera...">
+        <i class="fas fa-search"></i>
+      </div>
+    </div>
+    
+    <h2 class="section-title">Selecciona una carrera</h2>
+    
+    <div class="carreras-list" id="carreras-container">
+      <!-- Carreras se cargarán aquí dinámicamente -->
+    </div>
+  </main>
+
+  <script src="/static/js/asistencia.js"></script>
+</body>
+</html>
