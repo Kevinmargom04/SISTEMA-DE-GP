@@ -8,6 +8,7 @@ from io import BytesIO
 from flask import send_file
 import tempfile
 from flask import send_from_directory
+from datetime import datetime 
 
 
 # --- Inicialización de la app y configuración ---
@@ -67,8 +68,65 @@ def init_db():
             FOREIGN KEY (proyecto_id) REFERENCES proyectos (id)
         )
     ''')
+    # Tabla de carreras
+    cursor.execute('''
+        CREATE TABLE IF NOT EXISTS carreras (
+            id INTEGER PRIMARY KEY AUTOINCREMENT,
+            nombre TEXT NOT NULL UNIQUE,
+            codigo TEXT NOT NULL UNIQUE
+        )
+    ''')
 
-    
+    # Tabla de grupos
+    cursor.execute('''
+        CREATE TABLE IF NOT EXISTS grupos (
+            id INTEGER PRIMARY KEY AUTOINCREMENT,
+            carrera_id INTEGER NOT NULL,
+            nombre TEXT NOT NULL,
+            codigo TEXT NOT NULL UNIQUE,
+            FOREIGN KEY (carrera_id) REFERENCES carreras (id)
+        )
+    ''')
+
+    # Tabla de alumnos
+    cursor.execute('''
+        CREATE TABLE IF NOT EXISTS alumnos (
+            id INTEGER PRIMARY KEY AUTOINCREMENT,
+            grupo_id INTEGER NOT NULL,
+            matricula TEXT NOT NULL UNIQUE,
+            apellidos TEXT NOT NULL,
+            nombre TEXT NOT NULL,
+            FOREIGN KEY (grupo_id) REFERENCES grupos (id)
+        )
+    ''')
+
+    # Tabla de asistencias
+    cursor.execute('''
+        CREATE TABLE IF NOT EXISTS asistencias (
+            id INTEGER PRIMARY KEY AUTOINCREMENT,
+            grupo_id INTEGER NOT NULL,
+            fecha DATE NOT NULL,
+            FOREIGN KEY (grupo_id) REFERENCES grupos (id),
+            UNIQUE(grupo_id, fecha)
+        )
+    ''')
+
+    # Tabla de detalle_asistencias
+    cursor.execute('''
+        CREATE TABLE IF NOT EXISTS detalle_asistencias (
+            id INTEGER PRIMARY KEY AUTOINCREMENT,
+            asistencia_id INTEGER NOT NULL,
+            alumno_id INTEGER NOT NULL,
+            presente BOOLEAN NOT NULL DEFAULT 0,
+            FOREIGN KEY (asistencia_id) REFERENCES asistencias (id),
+            FOREIGN KEY (alumno_id) REFERENCES alumnos (id),
+            UNIQUE(asistencia_id, alumno_id)
+        )
+    ''')
+
+    # Insertar datos iniciales
+    insertar_datos_iniciales(cursor)
+
         # Crear admin por defecto
     cursor.execute('''
         INSERT OR IGNORE INTO admin (username, password)
@@ -95,6 +153,49 @@ def init_db():
 
     conn.commit()
     conn.close()
+    
+    
+
+
+
+def insertar_datos_iniciales(cursor):
+    # Insertar carreras
+    carreras = [
+        ('Ingeniería en Software', 'IS'),
+        ('Ingeniería en Manufactura', 'ITM'),
+        ('Ingeniería Mecánica A', 'IMA')
+    ]
+    cursor.executemany('INSERT OR IGNORE INTO carreras (nombre, codigo) VALUES (?, ?)', carreras)
+
+    # Obtener IDs de carreras
+    cursor.execute('SELECT id, codigo FROM carreras')
+    carrera_ids = {codigo: id for id, codigo in cursor.fetchall()}
+
+    # Insertar grupos
+    grupos = [
+        (carrera_ids['IS'], '1925° IS - INGENIERÍA DE SOFTWARE', 'IS-1925'),
+        (carrera_ids['IS'], '2925° IS - INGENIERÍA DE SOFTWARE', 'IS-2925'),
+        (carrera_ids['IS'], '3925° IS - INGENIERÍA DE SOFTWARE', 'IS-3925'),
+        (carrera_ids['ITM'], '1625° ITM - Ingeniería en Manufactura', 'ITM-1625'),
+        (carrera_ids['ITM'], '1325° ITM - Ingeniería en Manufactura', 'ITM-1325'),
+        (carrera_ids['ITM'], '2326° ITM - Ingeniería en Manufactura', 'ITM-2326'),
+        (carrera_ids['IMA'], '1925° IMA - Ingeniería Mecánica A', 'IMA-1925'),
+        (carrera_ids['IMA'], '2325° IMA - Ingeniería Mecánica A', 'IMA-2325'),
+        (carrera_ids['IMA'], '3325° IMA - Ingeniería Mecánica A', 'IMA-3325')
+    ]
+    cursor.executemany('INSERT OR IGNORE INTO grupos (carrera_id, nombre, codigo) VALUES (?, ?, ?)', grupos)
+
+    # Ejemplo de alumnos (puedes borrar esto o usarlo para pruebas)
+    cursor.execute('SELECT id FROM grupos WHERE codigo = "IS-1925"')
+    grupo_id = cursor.fetchone()[0]
+    
+    alumnos_ejemplo = [
+        (grupo_id, 'A12345', 'Pérez', 'Juan'),
+        (grupo_id, 'A54321', 'García', 'María')
+    ]
+    cursor.executemany('INSERT OR IGNORE INTO alumnos (grupo_id, matricula, apellidos, nombre) VALUES (?, ?, ?, ?)', alumnos_ejemplo)
+    
+    
 init_db()
 
 # --- Rutas ---
@@ -294,6 +395,17 @@ def eliminar_reporte(reporte_id):
 
 
 
+@app.route('/api/carreras/<int:carrera_id>/grupos')
+def get_grupos_carrera(carrera_id):
+    with sqlite3.connect('database.db') as conn:
+        conn.row_factory = sqlite3.Row
+        grupos = conn.execute('''
+            SELECT * FROM grupos 
+            WHERE carrera_id = ?
+            ORDER BY nombre
+        ''', (carrera_id,)).fetchall()
+    return jsonify([dict(grupo) for grupo in grupos])
+
 
 
 # API para obtener información del usuario
@@ -312,49 +424,66 @@ def get_user_info():
     })
 
 # API para obtener carreras y grupos
+# Obtener todas las carreras
 @app.route('/api/carreras')
 def get_carreras():
-    # Esto es un ejemplo - deberías conectarte a tu base de datos real
-    carreras = [
-        {
-            "id": "software",
-            "nombre": "Ingeniería en Software",
-            "icono": "fa-laptop-code",
-            "grupos": [
-                "1925° IS - INGENIERÍA DE SOFTWARE",
-                "2925° IS - INGENIERÍA DE SOFTWARE"
-            ]
-        },
-        {
-            "id": "manufactura",
-            "nombre": "Ingeniería en Manufactura",
-            "icono": "fa-industry",
-            "grupos": [
-                "1625° ITM - Ingeniería en Manufactura"
-            ]
-        }
-    ]
-    return jsonify(carreras)
+    with sqlite3.connect('database.db') as conn:
+        conn.row_factory = sqlite3.Row
+        carreras = conn.execute('SELECT * FROM carreras ORDER BY nombre').fetchall()
+    return jsonify([dict(carrera) for carrera in carreras])
 
-# Ruta para la lista de asistencia
-@app.route('/lista-asistencia')
-def lista_asistencia():
-    carrera = request.args.get('carrera')
-    grupo = request.args.get('grupo')
-    fecha = request.args.get('fecha')
-    
-    # Aquí deberías obtener los alumnos del grupo seleccionado
-    # Esto es un ejemplo:
-    alumnos = [
-        {"matricula": "A12345", "nombre": "Juan Pérez", "asistencia": False},
-        {"matricula": "A67890", "nombre": "María García", "asistencia": False}
-    ]
-    
-    return render_template('lista_asistencia.html', 
-                         carrera=carrera, 
-                         grupo=grupo, 
-                         fecha=fecha,
-                         alumnos=alumnos)   
+# Obtener grupos por carrera
+@app.route('/api/grupos/<int:carrera_id>')
+def get_grupos(carrera_id):
+    with sqlite3.connect('database.db') as conn:
+        conn.row_factory = sqlite3.Row
+        grupos = conn.execute('''
+            SELECT * FROM grupos 
+            WHERE carrera_id = ?
+            ORDER BY nombre
+        ''', (carrera_id,)).fetchall()
+    return jsonify([dict(grupo) for grupo in grupos])
+
+# Obtener alumnos por grupo
+@app.route('/api/alumnos/<int:grupo_id>')
+def get_alumnos(grupo_id):
+    with sqlite3.connect('database.db') as conn:
+        conn.row_factory = sqlite3.Row
+        alumnos = conn.execute('''
+            SELECT * FROM alumnos 
+            WHERE grupo_id = ?
+            ORDER BY apellidos, nombre
+        ''', (grupo_id,)).fetchall()
+    return jsonify([dict(alumno) for alumno in alumnos])
+
+# Añadir nuevo alumno
+@app.route('/api/alumnos', methods=['POST'])
+def add_alumno():
+    data = request.get_json()
+    try:
+        with sqlite3.connect('database.db') as conn:
+            cursor = conn.cursor()
+            cursor.execute('''
+                INSERT INTO alumnos (grupo_id, matricula, apellidos, nombre)
+                VALUES (?, ?, ?, ?)
+            ''', (data['grupo_id'], data['matricula'], data['apellidos'], data['nombre']))
+            conn.commit()
+        return jsonify({"success": True, "id": cursor.lastrowid})
+    except sqlite3.IntegrityError:
+        return jsonify({"success": False, "error": "Matrícula ya existe"}), 400
+
+# Eliminar alumno
+@app.route('/api/alumnos/<int:alumno_id>', methods=['DELETE'])
+def delete_alumno(alumno_id):
+    try:
+        with sqlite3.connect('database.db') as conn:
+            conn.execute('DELETE FROM alumnos WHERE id = ?', (alumno_id,))
+            conn.commit()
+        return jsonify({"success": True})
+    except Exception as e:
+        return jsonify({"success": False, "error": str(e)}), 500
+
+
 # Ruta para guardar asistencia
 @app.route('/api/guardar-asistencia', methods=['POST'])
 def guardar_asistencia():
@@ -420,6 +549,47 @@ def generar_pdf_asistencia(asistencia_id):
     response.headers['Content-Type'] = 'application/pdf'
     response.headers['Content-Disposition'] = f'attachment; filename=asistencia_{asistencia_id}.pdf'
     return response
+
+
+@app.route('/lista-asistencia')
+def lista_asistencia():
+    # Obtener parámetros de la URL
+    grupo_id = request.args.get('grupo_id')  # Cambiado para coincidir con el JS
+    fecha = request.args.get('fecha')
+    
+    if not grupo_id or not fecha:
+        flash("Faltan parámetros necesarios", "error")
+        return redirect(url_for('asistencia'))
+    
+    # Obtener datos del grupo y alumnos desde la BD
+    with sqlite3.connect('database.db') as conn:
+        conn.row_factory = sqlite3.Row
+        
+        # Obtener información del grupo
+        grupo = conn.execute('''
+            SELECT g.*, c.nombre as carrera_nombre 
+            FROM grupos g
+            JOIN carreras c ON g.carrera_id = c.id
+            WHERE g.id = ?
+        ''', (grupo_id,)).fetchone()
+        
+        # Obtener alumnos del grupo
+        alumnos = conn.execute('''
+            SELECT * FROM alumnos 
+            WHERE grupo_id = ?
+            ORDER BY apellidos, nombre
+        ''', (grupo_id,)).fetchall()
+    
+    if not grupo:
+        flash("Grupo no encontrado", "error")
+        return redirect(url_for('asistencia'))
+    
+    return render_template(
+        'lista_asistencia.html',
+        grupo=dict(grupo),
+        alumnos=[dict(a) for a in alumnos],
+        fecha=fecha
+    )
 
 @app.route('/logout', methods=['POST'])
 def logout():

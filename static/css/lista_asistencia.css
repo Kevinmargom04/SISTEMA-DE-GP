@@ -1,4 +1,33 @@
 /* Estilos generales */
+/* Estilos generales */
+body {
+    margin: 0;
+    font-family: Arial, sans-serif;
+}
+
+.barra-superior {
+    background-color: #572364;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 30px 20px;
+}
+
+.titulo {
+    font-size: 24px;
+    margin: 0;
+    color: white;
+}
+
+.icono-home,
+.home-icon, .help-icon {
+  background-color: white;
+  border-radius: 50%;
+  padding: 10px;
+  font-size: 18px;
+
+}
+
 .lista-container {
   padding: 20px;
   max-width: 1200px;

@@ -12,10 +12,21 @@
         <div class="home-icon" title="Inicio" onclick="window.location.href='/dashboard'">
       <i class="fas fa-home"></i>
     </div>
-        <h1 class="titulo">OBSERVACIONES</h1>
+        <h1 class="titulo">ASISTENCIAS</h1>
         <div class="icono-usuario">○</div>
     </div>
-  
+  <header class="asistencia-header">
+    <button class="back-button" onclick="window.location.href='/dashboard'">
+      <i class="fas fa-arrow-left"></i> Volver
+    </button>
+    
+    <div class="header-actions">
+      <button class="help-button" id="btn-ayuda">
+        <i class="fas fa-question"></i>
+      </button>
+      <div class="user-info" id="user-info"></div>
+    </div>
+  </header>
 
   <main class="asistencia-container">
     <div class="filters-section">
@@ -32,7 +43,9 @@
     <h2 class="section-title">Selecciona una carrera</h2>
     
     <div class="carreras-list" id="carreras-container">
-      <!-- Carreras se cargarán aquí dinámicamente -->
+      <div class="carga-mensaje">
+        <i class="fas fa-spinner fa-spin"></i> Cargando carreras...
+      </div>
     </div>
   </main>
 
