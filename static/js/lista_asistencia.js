@@ -66,7 +66,7 @@ function obtenerNombreCarrera(id) {
 
 async function cargarAlumnos() {
   try {
-    // En una app real, esto vendría de una API
+
     alumnos = [
       { id: 1, matricula: 'A12345', nombre: 'Juan Pérez', asistencia: false },
       { id: 2, matricula: 'A67890', nombre: 'María García', asistencia: true }
@@ -319,9 +319,9 @@ function filtrarHistorial() {
     return item.fecha >= fechaInicio && item.fecha <= fechaFin;
   });
   
-  // Temporal: Simular filtrado
+  // Simula filtrado
   alert(`Mostrando asistencias entre ${fechaInicio} y ${fechaFin}`);
-  // En una app real, aquí recargarías los datos del servidor
+  
 }
 
 function verDetalleAsistencia(id) {
@@ -334,8 +334,8 @@ function verDetalleAsistencia(id) {
 function generarPDF(id) {
   const item = historial.find(h => h.id === id);
   if (item) {
-    // En una app real, generarías un PDF
+    
     alert(`Generando PDF para la asistencia del ${item.fecha}`);
-    // window.open(`/generar-pdf-asistencia/${id}`, '_blank');
+    
   }
 }

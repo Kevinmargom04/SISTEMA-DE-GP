@@ -185,7 +185,6 @@ def insertar_datos_iniciales(cursor):
     ]
     cursor.executemany('INSERT OR IGNORE INTO grupos (carrera_id, nombre, codigo) VALUES (?, ?, ?)', grupos)
 
-    # Ejemplo de alumnos (puedes borrar esto o usarlo para pruebas)
     cursor.execute('SELECT id FROM grupos WHERE codigo = "IS-1925"')
     grupo_id = cursor.fetchone()[0]
     
@@ -373,7 +372,7 @@ def generar_reporte(proyecto_id):
 @app.route('/eliminar-reporte/<int:reporte_id>', methods=['DELETE'])
 def eliminar_reporte(reporte_id):
     try:
-        # Primero obtenemos la ruta para borrar el archivo
+    
         with sqlite3.connect('database.db') as conn:
             conn.row_factory = sqlite3.Row
             reporte = conn.execute('SELECT ruta_archivo FROM reportes WHERE id = ?', (reporte_id,)).fetchone()
@@ -420,7 +419,7 @@ def get_user_info():
     
     return jsonify({
         "username": user['username'],
-        "nombre": user['username']  # Puedes añadir más campos si los tienes
+        "nombre": user['username'] 
     })
 
 # API para obtener carreras y grupos
@@ -509,7 +508,7 @@ def obtener_historial():
     carrera = request.args.get('carrera')
     grupo = request.args.get('grupo')
     
-    # Datos de ejemplo - en producción vendrían de la BD
+
     historial = [
         {
             "id": 1,
@@ -541,8 +540,7 @@ def generar_pdf_asistencia(asistencia_id):
         ]
     }
     
-    # En producción usarías ReportLab o similar para generar PDF
-    # Esto es un ejemplo que devuelve HTML como PDF
+
     from flask import make_response
     html = render_template('pdf_asistencia.html', **data)
     response = make_response(html)
@@ -554,7 +552,7 @@ def generar_pdf_asistencia(asistencia_id):
 @app.route('/lista-asistencia')
 def lista_asistencia():
     # Obtener parámetros de la URL
-    grupo_id = request.args.get('grupo_id')  # Cambiado para coincidir con el JS
+    grupo_id = request.args.get('grupo_id')
     fecha = request.args.get('fecha')
     
     if not grupo_id or not fecha:
